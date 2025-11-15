@@ -1,0 +1,76 @@
+{
+  "name": "notepadgtx",
+  "version": "1.0.0",
+  "description": "Advanced notepad with CLI and GUI modes for Linux",
+  "main": "src/gui-entry.js",
+  "bin": {
+    "notepadGTX": "./bin/notepadGTX.js"
+  },
+  "scripts": {
+    "start": "node src/main.js",
+    "start:cli": "node src/main.js --cli",
+    "start:gui": "electron src/main.js --gui",
+    "build": "npm run build:gui && npm run build:cli",
+    "build:gui": "electron-builder --linux",
+    "build:cli": "pkg src/cli-entry.js --targets node18-linux-x64 --output dist/notepadGTX-cli",
+    "build:package": "bash build-package.sh"
+  },
+  "keywords": [
+    "notepad",
+    "editor",
+    "cli",
+    "gui"
+  ],
+  "author": {
+    "name": "notepadGTX",
+    "email": "notepadgtx@example.com"
+  },
+  "homepage": "https://github.com/notepadgtx/notepadgtx",
+  "license": "MIT",
+  "pkg": {
+    "assets": [
+      "src/**/*",
+      "node_modules/blessed/lib/**/*",
+      "node_modules/blessed/usr/**/*"
+    ],
+    "scripts": [
+      "src/**/*.js",
+      "node_modules/blessed/lib/**/*.js"
+    ],
+    "targets": [
+      "node18-linux-x64"
+    ],
+    "outputPath": "dist"
+  },
+  "build": {
+    "appId": "com.notepadgtx.app",
+    "productName": "notepadGTX",
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "category": "Utility",
+      "executableName": "notepadGTX-gui",
+      "maintainer": "notepadGTX <notepadgtx@example.com>"
+    },
+    "files": [
+      "src/**/*",
+      "node_modules/**/*",
+      "package.json"
+    ],
+    "directories": {
+      "output": "dist",
+      "buildResources": "assets"
+    }
+  },
+  "dependencies": {
+    "blessed": "^0.1.81",
+    "commander": "^11.1.0"
+  },
+  "devDependencies": {
+    "electron": "^28.0.0",
+    "electron-builder": "^24.9.1",
+    "pkg": "^5.8.1"
+  }
+}

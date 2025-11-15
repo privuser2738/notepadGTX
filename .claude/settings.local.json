@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(chmod:*)",
+      "Bash(tree:*)",
+      "Bash(npm install:*)",
+      "Bash(echo $DISPLAY)",
+      "Bash(./bin/notepadGTX.js:*)",
+      "Bash(example.txt)",
+      "Bash(npm run build:cli:*)",
+      "Bash(./dist/notepadGTX-cli:*)",
+      "Bash(./build-package.sh:*)",
+      "Bash(dpkg:*)",
+      "Bash(/tmp/test-notepad.txt)",
+      "Bash(timeout 5 ./dist/notepadGTX-cli:*)",
+      "Bash(timeout 3 ./dist/notepadGTX-cli:*)",
+      "Bash(echo:*)",
+      "Bash(/tmp/test-simple.txt)",
+      "Bash(timeout 2 ./dist/notepadGTX-cli:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

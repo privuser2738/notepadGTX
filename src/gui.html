@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>notepadGTX</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Courier New', monospace;
+      background: #1e1e1e;
+      color: #d4d4d4;
+      overflow: hidden;
+    }
+
+    #container {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    #toolbar {
+      background: #2d2d30;
+      padding: 8px 12px;
+      border-bottom: 1px solid #3e3e42;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    #toolbar .shortcut {
+      font-size: 11px;
+      color: #999;
+      margin-right: 15px;
+    }
+
+    #editor {
+      flex: 1;
+      width: 100%;
+      background: #1e1e1e;
+      color: #d4d4d4;
+      border: none;
+      outline: none;
+      padding: 15px;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      line-height: 1.6;
+      resize: none;
+    }
+
+    #editor::-webkit-scrollbar {
+      width: 12px;
+    }
+
+    #editor::-webkit-scrollbar-track {
+      background: #1e1e1e;
+    }
+
+    #editor::-webkit-scrollbar-thumb {
+      background: #424242;
+      border-radius: 6px;
+    }
+
+    #editor::-webkit-scrollbar-thumb:hover {
+      background: #4e4e4e;
+    }
+
+    #statusbar {
+      background: #007acc;
+      color: white;
+      padding: 4px 12px;
+      font-size: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .shortcut-hint {
+      font-size: 11px;
+      opacity: 0.9;
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <div id="toolbar">
+      <span class="shortcut">Ctrl+V: Open</span>
+      <span class="shortcut">Ctrl+U: Save</span>
+      <span class="shortcut">Ctrl+N: Save As</span>
+      <span class="shortcut">Ctrl+K: Exit</span>
+    </div>
+    <textarea id="editor" placeholder="Start typing..."></textarea>
+    <div id="statusbar">
+      <span>notepadGTX - Ready</span>
+      <span class="shortcut-hint">Advanced text editor for Linux</span>
+    </div>
+  </div>
+
+  <script>
+    // Auto-focus on editor
+    document.getElementById('editor').focus();
+
+    // Track statistics
+    const editor = document.getElementById('editor');
+    const statusbar = document.getElementById('statusbar');
+
+    function updateStats() {
+      const text = editor.value;
+      const lines = text.split('\n').length;
+      const chars = text.length;
+      const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+
+      statusbar.querySelector('span:first-child').textContent =
+        `Lines: ${lines} | Words: ${words} | Characters: ${chars}`;
+    }
+
+    editor.addEventListener('input', updateStats);
+    updateStats();
+  </script>
+</body>
+</html>

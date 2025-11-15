@@ -1,0 +1,165 @@
+================================================================================
+                    notepadGTX - Build Instructions
+================================================================================
+
+QUICK START
+-----------
+
+1. Build CLI binary only (fastest):
+   $ ./quick-build.sh
+
+   Output: dist/notepadGTX-cli (46MB standalone binary)
+
+2. Build everything (CLI + GUI + installer package):
+   $ ./build-package.sh
+
+   Output: Complete installer package in dist/
+
+================================================================================
+
+DETAILED BUILD OPTIONS
+----------------------
+
+Option A: CLI Binary Only
+   $ npm install
+   $ npm run build:cli
+
+   Creates: dist/notepadGTX-cli
+   Time: ~2-3 minutes
+   Size: ~46MB
+
+Option B: GUI Binaries Only
+   $ npm install
+   $ npm run build:gui
+
+   Creates:
+   - dist/notepadGTX-*.AppImage
+   - dist/notepadgtx_*.deb
+   - dist/notepadgtx-*.rpm
+   Time: ~5-10 minutes
+   Size: ~150-200MB each
+
+Option C: Complete Build
+   $ npm install
+   $ npm run build
+
+   Creates: All CLI and GUI binaries
+   Time: ~10-15 minutes
+
+Option D: Full Package (Recommended for distribution)
+   $ ./build-package.sh
+
+   Creates: Everything above + installer package + tarball
+   Time: ~10-15 minutes
+
+================================================================================
+
+TESTING BUILDS
+--------------
+
+Test CLI binary:
+   $ ./dist/notepadGTX-cli --help
+   $ ./dist/notepadGTX-cli -f test.txt
+
+Test GUI binary (if display available):
+   $ chmod +x dist/notepadGTX-*.AppImage
+   $ ./dist/notepadGTX-*.AppImage
+
+================================================================================
+
+DISTRIBUTION
+------------
+
+For end-users, distribute:
+   dist/notepadGTX-installer.tar.gz
+
+This contains:
+   - CLI binary (standalone, no dependencies)
+   - GUI AppImage (standalone, no dependencies)
+   - .deb package (for Debian/Ubuntu)
+   - .rpm package (for RedHat/Fedora)
+   - install.sh script
+   - Documentation
+
+Users install with:
+   $ tar -xzf notepadGTX-installer.tar.gz
+   $ cd notepadGTX-installer
+   $ sudo ./install.sh
+
+================================================================================
+
+REQUIREMENTS
+------------
+
+Build requirements:
+   - Node.js v14+
+   - npm
+   - ~500MB disk space for build cache
+   - ~1GB disk space for final binaries
+
+Runtime requirements (for end-users):
+   - None! Binaries are completely standalone
+   - GUI requires X11/Wayland display server
+
+================================================================================
+
+FILE STRUCTURE AFTER BUILD
+--------------------------
+
+dist/
+├── notepadGTX-cli                    # CLI standalone binary (46MB)
+├── notepadGTX-*.AppImage             # GUI standalone binary (150-200MB)
+├── notepadgtx_*.deb                  # Debian package
+├── notepadgtx-*.rpm                  # RPM package
+├── notepadGTX-installer/             # Installer directory
+│   ├── install.sh                    # Installation script
+│   ├── notepadGTX-cli
+│   ├── notepadGTX-*.AppImage
+│   ├── *.deb
+│   ├── *.rpm
+│   └── README.txt
+└── notepadGTX-installer.tar.gz       # Complete package (300-350MB)
+
+================================================================================
+
+KEYBOARD SHORTCUTS
+------------------
+
+Both CLI and GUI modes:
+   Ctrl+U - Save
+   Ctrl+N - Save As
+   Ctrl+V - Open
+   Ctrl+K - Exit
+
+================================================================================
+
+TROUBLESHOOTING
+---------------
+
+Build fails with "pkg not found":
+   $ npm install --save-dev pkg
+
+Build fails with "electron-builder not found":
+   $ npm install --save-dev electron-builder
+
+Out of memory during build:
+   $ export NODE_OPTIONS="--max-old-space-size=4096"
+   $ npm run build
+
+Clean build:
+   $ rm -rf dist node_modules
+   $ npm install
+   $ npm run build
+
+================================================================================
+
+MORE INFORMATION
+----------------
+
+See documentation:
+   - BUILD.md - Detailed build instructions
+   - DISTRIBUTION.md - Distribution guide
+   - INSTALL-BINARY.md - End-user installation guide
+   - README.md - Full documentation
+
+================================================================================
