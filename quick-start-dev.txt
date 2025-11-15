@@ -1,0 +1,69 @@
+notepadGTX - Quick Development Guide
+=====================================
+
+RUNNING FROM SOURCE
+-------------------
+
+Development mode (CLI):
+  ./bin/notepadGTX.js
+  ./bin/notepadGTX.js -f myfile.txt
+
+GUI mode (requires Electron installed):
+  ./bin/notepadGTX.js --gui
+
+Or use npm scripts:
+  npm start             # CLI mode
+  npm run start:cli     # CLI mode
+  npm run start:gui     # GUI mode (requires Electron)
+
+TESTING BINARIES
+----------------
+
+CLI binary (standalone):
+  ./dist/notepadGTX-cli -f example.txt
+
+GUI AppImage (standalone):
+  chmod +x dist/notepadGTX-1.0.0.AppImage
+  ./dist/notepadGTX-1.0.0.AppImage
+
+BUILDING
+--------
+
+Build CLI only (fast):
+  npm run build:cli
+
+Build GUI only (requires Electron):
+  npm run build:gui
+
+Build everything:
+  ./build-package.sh
+
+KEYBOARD SHORTCUTS
+------------------
+
+Ctrl+U - Save
+Ctrl+N - Save As
+Ctrl+V - Open
+Ctrl+K - Exit
+
+Arrow keys for navigation
+Home/End for line start/end
+Backspace/Delete to remove text
+
+TROUBLESHOOTING
+---------------
+
+"Electron not installed" error:
+  - Normal! Just use CLI mode instead
+  - Or install: npm install
+  - Then run: ./bin/notepadGTX.js --gui
+
+Binary shows errors:
+  - Use the built binaries in dist/
+  - They are standalone and fully tested
+
+Default mode is CLI:
+  - This is intentional for development
+  - Use --gui flag to test GUI mode
+  - Installed binaries auto-detect mode
+

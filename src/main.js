@@ -13,25 +13,45 @@ program
 
 const options = program.opts();
 
-// Determine mode
-let mode = 'gui'; // default
-if (options.cli) {
-  mode = 'cli';
-} else if (options.gui) {
+// Determine mode - default to CLI for development
+let mode = 'cli';
+if (options.gui) {
   mode = 'gui';
-} else if (!process.env.DISPLAY && process.stdout.isTTY) {
-  // If no display and running in terminal, default to CLI
+} else if (options.cli) {
+  mode = 'cli';
+} else if (!process.env.DISPLAY || !process.stdout.isTTY) {
+  // If no display or not in terminal, use CLI
   mode = 'cli';
 }
 
 if (mode === 'cli') {
-  const CliNotepad = require('./cli-notepad');
+  // Use simple CLI implementation for better compatibility
+  const CliNotepad = require('./simple-cli');
   const notepad = new CliNotepad(options.file);
   notepad.start();
 } else {
   // Launch Electron GUI
+  let electron;
   try {
-    const { app } = require('electron');
+    electron = require('electron');
+  } catch (error) {
+    console.error('Error: Electron is not installed.');
+    console.error('Please run: npm install');
+    console.error('');
+    console.error('Alternatively, you can use CLI mode:');
+    console.error('  notepadGTX --cli');
+    process.exit(1);
+  }
+
+  if (!electron || !electron.app) {
+    console.error('Error: Electron failed to load properly.');
+    console.error('Falling back to CLI mode...');
+    console.error('');
+    const CliNotepad = require('./simple-cli');
+    const notepad = new CliNotepad(options.file);
+    notepad.start();
+  } else {
+    const { app } = electron;
     const GuiNotepad = require('./gui-notepad');
 
     app.whenReady().then(() => {
@@ -44,16 +64,5 @@ if (mode === 'cli') {
         app.quit();
       }
     });
-  } catch (error) {
-    if (error.code === 'MODULE_NOT_FOUND') {
-      console.error('Error: Electron is not installed.');
-      console.error('Please run: npm install');
-      console.error('');
-      console.error('Alternatively, you can use CLI mode:');
-      console.error('  notepadGTX --cli');
-      process.exit(1);
-    } else {
-      throw error;
-    }
   }
 }

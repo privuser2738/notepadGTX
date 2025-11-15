@@ -16,7 +16,8 @@
       "Bash(timeout 3 ./dist/notepadGTX-cli:*)",
       "Bash(echo:*)",
       "Bash(/tmp/test-simple.txt)",
-      "Bash(timeout 2 ./dist/notepadGTX-cli:*)"
+      "Bash(timeout 2 ./dist/notepadGTX-cli:*)",
+      "Bash(timeout 2 ./bin/notepadGTX.js:*)"
     ],
     "deny": [],
     "ask": []
