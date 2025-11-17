@@ -1,6 +1,6 @@
 {
   "name": "notepadgtx",
-  "version": "1.0.0",
+  "version": "1.2.2",
   "description": "Advanced notepad with CLI and GUI modes for Linux",
   "main": "src/gui-entry.js",
   "bin": {
@@ -13,7 +13,11 @@
     "build": "npm run build:gui && npm run build:cli",
     "build:gui": "electron-builder --linux",
     "build:cli": "pkg src/cli-entry.js --targets node18-linux-x64 --output dist/notepadGTX-cli",
-    "build:package": "bash build-package.sh"
+    "build:package": "bash build-package.sh",
+    "build:windows": "bash build-windows.sh",
+    "build:cli:windows": "pkg src/cli-entry.js --targets node18-win-x64 --output dist/notepadGTX-windows/notepadGTX-cli.exe",
+    "build:windows-release": "bash build-windows-release.sh",
+    "build:gui:windows": "electron-builder --windows --x64"
   },
   "keywords": [
     "notepad",
@@ -38,7 +42,8 @@
       "node_modules/blessed/lib/**/*.js"
     ],
     "targets": [
-      "node18-linux-x64"
+      "node18-linux-x64",
+      "node18-win-x64"
     ],
     "outputPath": "dist"
   },
@@ -53,6 +58,23 @@
       "category": "Utility",
       "executableName": "notepadGTX-gui",
       "maintainer": "notepadGTX <notepadgtx@example.com>"
+    },
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ],
+      "artifactName": "${productName}-${version}-${arch}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "notepadGTX"
+    },
+    "portable": {
+      "artifactName": "notepadGTX-${version}-portable.exe"
     },
     "files": [
       "src/**/*",
