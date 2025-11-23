@@ -13,14 +13,14 @@ program
 
 const options = program.opts();
 
-// Determine mode - default to CLI for development
-let mode = 'cli';
-if (options.gui) {
-  mode = 'gui';
-} else if (options.cli) {
+// Determine mode - default to GUI
+let mode = 'gui';
+if (options.cli) {
   mode = 'cli';
-} else if (!process.env.DISPLAY || !process.stdout.isTTY) {
-  // If no display or not in terminal, use CLI
+} else if (options.gui) {
+  mode = 'gui';
+} else if (!process.env.DISPLAY) {
+  // If no display available, fall back to CLI
   mode = 'cli';
 }
 

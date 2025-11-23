@@ -2,7 +2,7 @@
   "name": "notepadgtx",
   "version": "1.2.2",
   "description": "Advanced notepad with CLI and GUI modes for Linux",
-  "main": "src/gui-entry.js",
+  "main": "src/main.js",
   "bin": {
     "notepadGTX": "./bin/notepadGTX.js"
   },
@@ -56,7 +56,7 @@
         "deb"
       ],
       "category": "Utility",
-      "executableName": "notepadGTX-gui",
+      "executableName": "notepadGTX",
       "maintainer": "notepadGTX <notepadgtx@example.com>"
     },
     "win": {

@@ -10,38 +10,31 @@ echo "======================================"
 echo ""
 
 # Clean previous builds
-echo "[1/6] Cleaning previous builds..."
+echo "[1/5] Cleaning previous builds..."
 rm -rf dist
 mkdir -p dist
 
 # Install dependencies if needed
 if [ ! -d "node_modules" ]; then
-    echo "[2/6] Installing dependencies..."
+    echo "[2/5] Installing dependencies..."
     npm install
 else
-    echo "[2/6] Dependencies already installed"
+    echo "[2/5] Dependencies already installed"
 fi
 
-# Build CLI binary
-echo "[3/6] Building CLI binary..."
-npm run build:cli
-
-# Build GUI binaries (AppImage, deb, rpm)
-echo "[4/6] Building GUI binaries..."
+# Build GUI binary (includes CLI support via --cli flag)
+echo "[3/5] Building notepadGTX binary..."
 npm run build:gui
 
 # Create unified installer package
-echo "[5/6] Creating installer package..."
+echo "[4/5] Creating installer package..."
 
 # Create package directory
 PKG_DIR="dist/notepadGTX-installer"
 mkdir -p "$PKG_DIR"
 
 # Copy binaries
-echo "  - Copying CLI binary..."
-cp dist/notepadGTX-cli "$PKG_DIR/"
-
-echo "  - Copying GUI binaries..."
+echo "  - Copying binaries..."
 cp dist/*.AppImage "$PKG_DIR/" 2>/dev/null || echo "    (No AppImage found)"
 cp dist/*.deb "$PKG_DIR/" 2>/dev/null || echo "    (No .deb found)"
 cp dist/*.rpm "$PKG_DIR/" 2>/dev/null || echo "    (No .rpm found)"
@@ -83,64 +76,27 @@ mkdir -p "$INSTALL_DIR"
 mkdir -p "$DESKTOP_DIR"
 mkdir -p "$ICON_DIR"
 
-# Install CLI binary
-echo "[1/4] Installing CLI binary..."
-if [ -f "notepadGTX-cli" ]; then
-    cp notepadGTX-cli "$INSTALL_DIR/notepadgtx-cli"
-    chmod +x "$INSTALL_DIR/notepadgtx-cli"
-    echo "  ✓ CLI binary installed to $INSTALL_DIR/notepadgtx-cli"
+# Install binary (AppImage)
+echo "[1/2] Installing notepadGTX binary..."
+APPIMAGE=$(ls *.AppImage 2>/dev/null | head -n1)
+if [ -n "$APPIMAGE" ]; then
+    cp "$APPIMAGE" "$INSTALL_DIR/notepadGTX"
+    chmod +x "$INSTALL_DIR/notepadGTX"
+    echo "  ✓ Binary installed to $INSTALL_DIR/notepadGTX"
 else
-    echo "  ✗ CLI binary not found"
+    echo "  ✗ Binary (AppImage) not found"
     exit 1
 fi
 
-# Install GUI binary (AppImage)
-echo "[2/4] Installing GUI binary..."
-APPIMAGE=$(ls *.AppImage 2>/dev/null | head -n1)
-if [ -n "$APPIMAGE" ]; then
-    cp "$APPIMAGE" "$INSTALL_DIR/notepadgtx-gui"
-    chmod +x "$INSTALL_DIR/notepadgtx-gui"
-    echo "  ✓ GUI binary installed to $INSTALL_DIR/notepadgtx-gui"
-else
-    echo "  ✗ GUI binary (AppImage) not found"
-fi
-
-# Create unified launcher script
-echo "[3/4] Creating launcher..."
-cat > "$INSTALL_DIR/notepadgtx" << 'LAUNCHER'
-#!/bin/bash
-
-# notepadGTX Unified Launcher
-
-if [[ "$1" == "--cli" ]] || [[ "$1" == "-c" ]]; then
-    # Launch CLI mode
-    shift
-    exec notepadgtx-cli "$@"
-elif [[ "$1" == "--gui" ]] || [[ "$1" == "-g" ]]; then
-    # Launch GUI mode
-    shift
-    exec notepadgtx-gui "$@"
-elif [ -z "$DISPLAY" ] || [ ! -t 0 ]; then
-    # No display available, use CLI
-    exec notepadgtx-cli "$@"
-else
-    # Default to GUI
-    exec notepadgtx-gui "$@"
-fi
-LAUNCHER
-
-chmod +x "$INSTALL_DIR/notepadgtx"
-echo "  ✓ Launcher installed to $INSTALL_DIR/notepadgtx"
-
 # Create desktop entry
-echo "[4/4] Creating desktop entry..."
+echo "[2/2] Creating desktop entry..."
 cat > "$DESKTOP_DIR/notepadgtx.desktop" << 'DESKTOP'
 [Desktop Entry]
 Version=1.0
 Type=Application
 Name=notepadGTX
 Comment=Advanced notepad with CLI and GUI modes
-Exec=notepadgtx %F
+Exec=notepadGTX %F
 Icon=notepadgtx
 Terminal=false
 Categories=Utility;TextEditor;
@@ -155,10 +111,10 @@ echo "  Installation Complete!"
 echo "======================================"
 echo ""
 echo "Usage:"
-echo "  notepadgtx           - Auto-detect mode (GUI if available)"
-echo "  notepadgtx --cli     - Force CLI mode"
-echo "  notepadgtx --gui     - Force GUI mode"
-echo "  notepadgtx -f FILE   - Open file"
+echo "  notepadGTX            - Launch GUI (default)"
+echo "  notepadGTX --cli      - Launch in CLI mode"
+echo "  notepadGTX -c         - Launch in CLI mode (short)"
+echo "  notepadGTX -f FILE    - Open file"
 echo ""
 echo "CLI Keyboard Shortcuts:"
 echo "  Ctrl+U - Save"
@@ -190,8 +146,7 @@ notepadGTX Installation Package
 
 Contents:
 ---------
-- notepadGTX-cli          : CLI binary (standalone, no dependencies)
-- notepadGTX-*.AppImage   : GUI binary (standalone)
+- notepadGTX-*.AppImage   : Unified binary (GUI + CLI)
 - *.deb                   : Debian/Ubuntu package (optional)
 - *.rpm                   : RedHat/Fedora package (optional)
 - install.sh              : Installation script
@@ -205,9 +160,8 @@ Or for local installation (no sudo):
 
 Manual Installation:
 --------------------
-1. Copy notepadGTX-cli to /usr/local/bin/ (or ~/.local/bin/)
-2. Copy notepadGTX-*.AppImage to /usr/local/bin/ (or ~/.local/bin/)
-3. Make them executable: chmod +x /usr/local/bin/notepadGTX-*
+1. Copy notepadGTX-*.AppImage to /usr/local/bin/notepadGTX
+2. Make it executable: chmod +x /usr/local/bin/notepadGTX
 
 Package Installation (Debian/Ubuntu):
 --------------------------------------
@@ -219,12 +173,13 @@ sudo rpm -i notepadgtx-*.rpm
 
 Usage:
 ------
-notepadgtx --cli     # CLI mode
-notepadgtx --gui     # GUI mode
-notepadgtx -f file   # Open file
+notepadGTX            # GUI mode (default)
+notepadGTX --cli      # CLI mode
+notepadGTX -c         # CLI mode (short)
+notepadGTX -f file    # Open file
 
-Keyboard Shortcuts:
--------------------
+Keyboard Shortcuts (CLI mode):
+------------------------------
 Ctrl+U - Save
 Ctrl+N - Save As
 Ctrl+V - Open
@@ -234,7 +189,7 @@ For more information, see README.md and SHORTCUTS.md
 EOF
 
 # Create tarball
-echo "[6/6] Creating tarball..."
+echo "[5/5] Creating tarball..."
 cd dist
 tar -czf notepadGTX-installer.tar.gz notepadGTX-installer/
 cd ..
@@ -245,12 +200,15 @@ echo "  Build Complete!"
 echo "======================================"
 echo ""
 echo "Output files:"
-echo "  - dist/notepadGTX-cli (CLI binary)"
-echo "  - dist/*.AppImage (GUI binary)"
+echo "  - dist/*.AppImage (notepadGTX binary)"
 echo "  - dist/*.deb (Debian package)"
 echo "  - dist/*.rpm (RPM package)"
 echo "  - dist/notepadGTX-installer/ (Complete installer package)"
 echo "  - dist/notepadGTX-installer.tar.gz (Compressed installer)"
+echo ""
+echo "Usage after install:"
+echo "  notepadGTX            # GUI mode (default)"
+echo "  notepadGTX --cli      # CLI mode"
 echo ""
 echo "To distribute:"
 echo "  tar -xzf notepadGTX-installer.tar.gz"
