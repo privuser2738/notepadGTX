@@ -20,7 +20,10 @@
       "Bash(timeout 2 ./bin/notepadGTX.js:*)",
       "Bash(npm run build:windows:*)",
       "Bash(dist/notepadGTX-1.2.2.AppImage:*)",
-      "Bash(timeout:*)"
+      "Bash(timeout:*)",
+      "Bash(python -c:*)",
+      "Bash(pip install:*)",
+      "Bash(python create-icon.py:*)"
     ],
     "deny": [],
     "ask": []

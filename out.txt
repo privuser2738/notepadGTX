@@ -1,0 +1,41 @@
+==============================================
+  notepadGTX Windows GUI Release Builder
+==============================================
+
+[1/4] Cleaning previous Windows GUI builds...
+[2/4] Dependencies already installed
+[3/4] Building Windows GUI application...
+  This may take several minutes on first build...
+
+
+> notepadgtx@1.2.2 build:gui:windows
+> electron-builder --windows --x64
+
+  • electron-builder  version=24.13.3 os=10.0.26200
+  • loaded configuration  file=package.json ("build" field)
+  • packaging       platform=win32 arch=x64 electron=28.3.3 appOutDir=dist\win-unpacked
+  • building        target=nsis file=dist\notepadGTX-1.2.2-x64.exe archs=x64 oneClick=false perMachine=false
+  • default Electron icon is used  reason=application icon is not set
+  • downloading     url=https://github.com/electron-userland/electron-builder-binaries/releases/download/nsis-3.0.4.1/nsis-3.0.4.1.7z size=1.3 MB parts=1
+  • downloaded      url=https://github.com/electron-userland/electron-builder-binaries/releases/download/nsis-3.0.4.1/nsis-3.0.4.1.7z duration=536ms
+  • downloading     url=https://github.com/electron-userland/electron-builder-binaries/releases/download/nsis-resources-3.4.1/nsis-resources-3.4.1.7z size=731 kB parts=1
+  • downloaded      url=https://github.com/electron-userland/electron-builder-binaries/releases/download/nsis-resources-3.4.1/nsis-resources-3.4.1.7z duration=430ms
+  • building block map  blockMapFile=dist\notepadGTX-1.2.2-x64.exe.blockmap
+  • building        target=portable file=dist\notepadGTX-1.2.2-portable.exe archs=x64
+[4/4] Organizing release files...
+  - Copied Windows installers/portable exe
+  - Copied unpacked application
+  - Copying documentation...
+
+==============================================
+  Windows GUI Build Complete!
+==============================================
+
+Output directory: dist\notepadGTX-windows-release\
+
+notepadGTX-1.2.2-portable.exe
+notepadGTX-1.2.2-x64.exe
+
+To distribute: Zip the notepadGTX-windows-release folder
+
+Press any key to continue . . . 

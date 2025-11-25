@@ -15,12 +15,16 @@ const options = program.opts();
 
 // Determine mode - default to GUI
 let mode = 'gui';
+// Check if running inside Electron (packaged or dev)
+const isElectron = process.versions && process.versions.electron;
+
 if (options.cli) {
   mode = 'cli';
-} else if (options.gui) {
+} else if (options.gui || isElectron) {
   mode = 'gui';
-} else if (!process.env.DISPLAY) {
-  // If no display available, fall back to CLI
+} else if (process.platform !== 'win32' && !process.env.DISPLAY) {
+  // If no display available on Linux/Mac, fall back to CLI
+  // Windows doesn't use DISPLAY env var
   mode = 'cli';
 }
 
